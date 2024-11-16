@@ -117,7 +117,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            yarn lerna publish from-package  --yes --no-git-reset --no-verify-access 
+            yarn lerna publish from-package  --yes --no-git-reset 
           elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
             yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset --no-verify-access
           fi
