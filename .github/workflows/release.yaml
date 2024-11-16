@@ -79,7 +79,7 @@ jobs:
         run: yarn docs:bundle
 
       - name: Remove RC Tags
-        if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]') && startsWith(github.head_ref, 'release-') }}
+        if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'release-') && contains(github.event.head_commit.message, '[release]') }}
         run: |
           node scripts/remove-rc-tags.js
           git config --global user.email "sudil.abeyagunasekera@cognite.com"
