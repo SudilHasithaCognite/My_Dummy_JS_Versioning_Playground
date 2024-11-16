@@ -5,11 +5,11 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp",
     "test": "lerna run test",
     "docs:bundle": "echo 'no docs yet'"
   },
   "devDependencies": {
-    "lerna": "^7.1.4"
+    "lerna": "^7.4.2"
   }
 }

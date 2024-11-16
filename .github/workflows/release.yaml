@@ -28,22 +28,21 @@ jobs:
         run: yarn install --immutable
 
       - name: Build
-        run: yarn build
+        run: yarn lerna run build --stream
 
   publish:
-    if: |-
-      ${{
-        !contains(github.event.commits[0].message, '[skip-ci]') &&
-        (
-          (github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
-          (startswith(github.ref, 'refs/heads/release-') &&
-            (startsWith(github.event.commits[0].message, 'fix:')  ||
-            startsWith(github.event.commits[0].message, 'fix(')  ||
-            startsWith(github.event.commits[0].message, 'feat:') ||
-            startsWith(github.event.commits[0].message, 'feat(') ||
-            contains(github.event.commits[0].message, '[release]')))
+    if: ${{ !contains(github.event.commits[0].message, '[skip-ci]') && 
+      (
+        (github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
+        (startsWith(github.ref, 'refs/heads/release-') && 
+          (startsWith(github.event.commits[0].message, 'fix:') || 
+          startsWith(github.event.commits[0].message, 'fix(') || 
+          startsWith(github.event.commits[0].message, 'feat:') || 
+          startsWith(github.event.commits[0].message, 'feat(') || 
+          contains(github.event.commits[0].message, '[release]')
           )
         )
+      ) 
       }}
     runs-on: ubuntu-latest
     environment: CD
@@ -70,12 +69,12 @@ jobs:
 
       - name: Lerna env config
         run: |
-          git config --global user.email "cognite-cicd@users.noreply.github.com"
-          git config --global user.name "Cognite CICD"
+          git config --global user.email "sudilhasithaa51@gmail.com"
+          git config --global user.name "SudilHasitha"
           git remote set-url origin "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" > /dev/null 2>&1
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
         env:
-          NPM_TOKEN: ${{secrets.NPM_PUBLISH_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
           GITHUB_TOKEN: ${{secrets.GH_LERNA_TOKEN}} # Temporary fix to make lerna able to push the new versions commit to master
 
       - name: Build
@@ -101,13 +100,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }} # Temporary fix to make lerna able to push the new versions commit to master
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            if [[ "${{ startsWith(github.head_ref , 'release-') }}"]]; then
+            if [[ "${{ startsWith(github.head_ref, 'release-') }}" == "true" ]]; then
               echo "Skipping version bump for release merge"
-            elif [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
+            elif [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true" ]]; then
               yarn lerna version --conventional-commits --create-release github --no-private --yes
             fi
-          elif [[ "${{ github.ref }}" == refs/heads/release-*  ]]; then
-            if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true"]]; then
+          elif [[ "${{ github.ref }}" =~ ^refs/heads/release-.* ]]; then
+            if [[ "${{ contains(github.event.commits[0].message, '[bump-version]') }}" == "true" ]]; then
               yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
             fi
           fi
@@ -115,12 +114,12 @@ jobs:
         if: contains(github.event.commits[0].message,'[release]')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            yarn lerna publish from-package  --yes --no-git-reset --no-verify-access 
+            yarn lerna publish from-package  --yes --no-git-reset
           elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
-            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset --no-verify-access
+            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset
           fi
 
       # - name: Publish documentation

@@ -1,9 +1,7 @@
 {
   "name": "@my-dummy-js-versioning-playground/remixapp",
   "version": "1.0.0",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
@@ -17,8 +15,11 @@
     "@remix-run/serve": "^1.5.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "header": "*",
-    "footer": "*"
+    "express": "^4.18.2",
+    "compression": "^1.7.4",
+    "morgan": "^1.10.0",
+    "@my-dummy-js-versioning-playground/header": "*",
+    "@my-dummy-js-versioning-playground/footer": "*"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.5.1",
