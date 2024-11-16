@@ -28,7 +28,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build
-        run: lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
+        run: yarn lerna run build --stream
 
   publish:
     if: ${{ !contains(github.event.commits[0].message, '[skip-ci]') && 
@@ -117,9 +117,9 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/master" ]]; then
-            yarn lerna publish from-package  --yes --no-git-reset --access public
+            yarn lerna publish from-package  --yes --no-git-reset
           elif [[ "${{ github.ref }}" == refs/heads/release-* ]]; then
-            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset --access public
+            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset
           fi
 
       # - name: Publish documentation
