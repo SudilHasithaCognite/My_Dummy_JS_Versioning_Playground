@@ -1,7 +1,9 @@
 {
-  "name": "remixapp",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@my-dummy-js-versioning-playground/remixapp",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "scripts": {
     "build": "remix build",

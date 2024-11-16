@@ -1,6 +1,17 @@
 {
-  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
-  "useNx": true,
+  "version": "independent",
+  "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "0.0.0"
+  "command": {
+    "version": {
+      "allowBranch": ["master", "release-*"],
+      "message": "chore(release): publish [skip ci]",
+      "conventionalCommits": true,
+      "createRelease": "github"
+    },
+    "publish": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish [skip ci]"
+    }
+  }
 }

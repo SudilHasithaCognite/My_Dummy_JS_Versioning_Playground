@@ -1,6 +1,9 @@
 {
-  "name": "footer",
-  "version": "0.0.0",
+  "name": "@my-dummy-js-versioning-playground/footer",
+  "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
