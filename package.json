@@ -5,7 +5,6 @@
     "packages/*"
   ],
   "scripts": {
-    "install": "yarn install --immutable",
     "build": "lerna run build --stream",
     "test": "lerna run test",
     "docs:bundle": "echo 'no docs yet'"
