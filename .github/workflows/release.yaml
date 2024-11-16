@@ -31,19 +31,18 @@ jobs:
         run: yarn build
 
   publish:
-    if: |-
-      ${{
-        !contains(github.event.commits[0].message, '[skip-ci]') &&
-        (
-          (github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
-          (startswith(github.ref, 'refs/heads/release-') &&
-            (startsWith(github.event.commits[0].message, 'fix:')  ||
-            startsWith(github.event.commits[0].message, 'fix(')  ||
-            startsWith(github.event.commits[0].message, 'feat:') ||
-            startsWith(github.event.commits[0].message, 'feat(') ||
-            contains(github.event.commits[0].message, '[release]')))
+    if: ${{ !contains(github.event.commits[0].message, '[skip-ci]') && 
+      (
+        (github.ref == 'refs/heads/master' && contains(github.event.commits[0].message, '[release]')) ||
+        (startsWith(github.ref, 'refs/heads/release-') && 
+          (startsWith(github.event.commits[0].message, 'fix:') || 
+          startsWith(github.event.commits[0].message, 'fix(') || 
+          startsWith(github.event.commits[0].message, 'feat:') || 
+          startsWith(github.event.commits[0].message, 'feat(') || 
+          contains(github.event.commits[0].message, '[release]')
           )
         )
+      ) 
       }}
     runs-on: ubuntu-latest
     environment: CD
