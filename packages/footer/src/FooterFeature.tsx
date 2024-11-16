@@ -1,8 +1,8 @@
 import React from 'react';
 
 
-export function FooterFeature() {
+export function FooterFeature({text}) {
     return (
-        <div>This is a v2 feature</div>
+        <div>{text}</div>
     );
 }
