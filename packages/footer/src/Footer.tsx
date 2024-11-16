@@ -1,9 +1,13 @@
 import React from 'react';
+import { FooterFeature } from './FooterFeature';
 
 export function Footer() {
     return (
-        <footer>
-            Footer
-        </footer>
+        <>
+            <footer>
+                Feature for footer is added by v2
+            </footer>
+            <FooterFeature></FooterFeature>
+        </>
     );
 }
