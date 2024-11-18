@@ -5,7 +5,7 @@
   "npmClient": "yarn",
   "command": {
     "version": {
-      "allowBranch": ["master", "release-*"],
+      "allowBranch": ["main", "release-*"],
       "message": "chore(release): publish [skip ci]",
       "conventionalCommits": true,
       "createRelease": "github"
