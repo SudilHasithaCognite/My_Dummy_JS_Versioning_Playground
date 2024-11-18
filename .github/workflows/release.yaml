@@ -93,7 +93,11 @@ jobs:
       - name: Lerna Versioning
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" && "${GITHUB_HEAD_REF}" != release-* ]]; then
-            yarn lerna version --conventional-commits --create-release github --no-private --yes
+            if ${{ contains(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, '[release]') }} then
+              echo "Skipping Lerna version for release merge"
+            else
+              yarn lerna version --conventional-commits --create-release github --no-private --yes
+            fi
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
             yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
           fi
