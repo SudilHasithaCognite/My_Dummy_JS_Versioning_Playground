@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@2.0.1...@my-dummy-js-versioning-playground/header@2.1.0) (2024-11-18)
+
+
+### Features
+
+* **test:** add a feature directly to v2 main [release] ([d64549d](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/d64549df07bdff8385452ef257887a7d3ea20916))
+
+
+
+
+
 ## [2.0.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@2.0.0-rc.4...@my-dummy-js-versioning-playground/header@2.0.1) (2024-11-18)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/header
