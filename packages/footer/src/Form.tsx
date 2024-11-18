@@ -1,10 +1,7 @@
 import React from "react";
-
-export function Form(){
-    <>
-        <ol>
-            <li>Name: </li>
-            <li>Age: </li>
-        </ol>
-    </>
+import { testing } from "../Test/test";
+export function Form({x}){
+        <form onSubmit={(x) => {testing(x)}}>
+            <input value={x}></input>
+        </form>
 }
