@@ -36,7 +36,9 @@ jobs:
         (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) ||
         (startsWith(github.ref, 'refs/heads/release-') && 
           (startsWith(github.event.head_commit.message, 'fix:') || 
+          startsWith(github.event.head_commit.message, 'fix(') ||
           startsWith(github.event.head_commit.message, 'feat:') || 
+          startsWith(github.event.head_commit.message, 'feat(') ||
           contains(github.event.head_commit.message, '[release]')
           )
         )
@@ -91,13 +93,9 @@ jobs:
       - name: Lerna Versioning
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" && "${GITHUB_HEAD_REF}" != release-* ]]; then
-            if echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep -q '[bump-version]'; then
-              yarn lerna version --conventional-commits --create-release github --no-private --yes
-            fi
+            yarn lerna version --conventional-commits --create-release github --no-private --yes
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
-            if echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep -q '[bump-version]'; then
-              yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
-            fi
+            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
           fi
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
