@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-rc.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@2.0.0-rc.2...@my-dummy-js-versioning-playground/header@2.0.0-rc.3) (2024-11-18)
+
+
+### Features
+
+* **test:** add a feature to v2 rc ([89d3414](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/89d34149103510fd3332594c1aa0f2bf98619c73))
+
+
+
+
+
+# [2.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@1.0.0-rc.2...@my-dummy-js-versioning-playground/header@2.0.0-rc.2) (2024-11-18)
+
+
+### Features
+
+* **test:** create a rc v2 to recheck the logic ([1512425](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/15124251816c89931f74462236bc54261a226e9f))
+
+
+
+
+
 # 1.0.0-rc.2 (2024-11-16)
 
 
