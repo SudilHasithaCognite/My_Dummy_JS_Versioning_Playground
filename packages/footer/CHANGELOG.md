@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@1.0.0-rc.2...@my-dummy-js-versioning-playground/footer@2.0.0-rc.2) (2024-11-18)
+
+
+### Features
+
+* **test:** add feature [bump-version][release] ([a31cd2f](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/a31cd2fdd74c88a0326eabf3a26eab8fe16ed9f4))
+* **test:** add feature for rc 2[release] ([e670f41](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/e670f416f93e56df7922a6dd3a812aa29098091a))
+* **test:** add feature for rc 2[release][bump-version] ([b7f3b52](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/b7f3b525a2f3ea6de8253a4a847d46984a368f9d))
+* **test:** create a rc v2 to recheck the logic ([1512425](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/15124251816c89931f74462236bc54261a226e9f))
+* **test:** modify the rc tag [release] ([b78513d](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/b78513d98ee48b8026997308b08f012ff93bd0ae))
+
+
+
+
+
 # 1.0.0-rc.2 (2024-11-16)
 
 
