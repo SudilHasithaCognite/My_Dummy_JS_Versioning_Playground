@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0-rc.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@4.0.0-rc.2...@my-dummy-js-versioning-playground/header@4.0.0-rc.3) (2024-11-18)
+
+
+### Features
+
+* **test:** add a form to v4 ([f116077](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/f11607793d61cf2d8b232f1ec1ffd19be837935b))
+
+
+
+
+
+# [4.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@3.0.1...@my-dummy-js-versioning-playground/header@4.0.0-rc.2) (2024-11-18)
+
+**Note:** Version bump only for package @my-dummy-js-versioning-playground/header
+
+
+
+
+
 ## [3.0.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@3.0.0-rc.2...@my-dummy-js-versioning-playground/header@3.0.1) (2024-11-18)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/header
