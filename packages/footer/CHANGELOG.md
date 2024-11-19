@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@6.0.0-rc.2...@my-dummy-js-versioning-playground/footer@6.1.0) (2024-11-19)
+
+
+### Features
+
+* **test:** dummy feature for v6 ([b98f5c1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/b98f5c1174f6f92de640be44b71023276800bd54))
+
+
+
+
+
 # [6.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@5.0.1...@my-dummy-js-versioning-playground/footer@6.0.0-rc.2) (2024-11-19)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/footer
