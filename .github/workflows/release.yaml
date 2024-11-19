@@ -80,6 +80,13 @@ jobs:
       - name: Build Documentation
         run: yarn docs:bundle
 
+      - name: Debug Variables
+        run: |
+          echo "GITHUB_REF=${GITHUB_REF}"
+          echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
+          echo "GITHUB_EVENT_HEAD_COMMIT_MESSAGE=${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}"
+      
+
       - name: Remove RC Tags
         if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'release-') && contains(github.event.head_commit.message, '[release]') }}
         run: |
@@ -93,7 +100,7 @@ jobs:
       - name: Lerna Versioning
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            if [[ "${GITHUB_HEAD_REF}" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep 'Merge pull request')" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep '[release]')" ]]; then
+            if [[ "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep 'Merge pull request')" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep '[release]')" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep 'release-')" ]]; then
               echo "Skipping Lerna version for release merge"
             else
               yarn lerna version --conventional-commits --create-release github --no-private --yes
