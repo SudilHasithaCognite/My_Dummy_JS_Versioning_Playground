@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [10.0.0](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@9.0.0-rc.3...@my-dummy-js-versioning-playground/footer@10.0.0) (2024-11-19)
+
+**Note:** Version bump only for package @my-dummy-js-versioning-playground/footer
+
+
+
+
+
 # [9.0.0-rc.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@9.0.0-rc.2...@my-dummy-js-versioning-playground/footer@9.0.0-rc.3) (2024-11-19)
 
 
