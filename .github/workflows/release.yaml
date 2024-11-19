@@ -84,8 +84,9 @@ jobs:
         run: |
           echo "GITHUB_REF=${GITHUB_REF}"
           echo "GITHUB_HEAD_REF=${GITHUB_HEAD_REF}"
-          echo "GITHUB_EVENT_HEAD_COMMIT_MESSAGE=${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}"
-      
+          echo "GITHUB_EVENT_NAME=${GITHUB_EVENT_NAME}"
+          echo "GITHUB_EVENT_PATH=${GITHUB_EVENT_PATH}"
+          cat ${GITHUB_EVENT_PATH} | jq .
 
       - name: Remove RC Tags
         if: ${{ github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, 'Merge pull request') && contains(github.event.head_commit.message, 'release-') && contains(github.event.head_commit.message, '[release]') }}
@@ -100,12 +101,16 @@ jobs:
       - name: Lerna Versioning
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            if [[ "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep 'Merge pull request')" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep '[release]')" && "$(echo "${GITHUB_EVENT_HEAD_COMMIT_MESSAGE}" | grep 'release-')" ]]; then
+            EVENT_PATH_CONTENT=$(cat ${GITHUB_EVENT_PATH} | jq -r '.')
+            HEAD_COMMIT_MSG=$(echo $EVENT_PATH_CONTENT | jq -r '.commits[0].message')
+            if [[ "$(echo "$HEAD_COMMIT_MSG" | grep 'Merge pull request')" && "$(echo "$HEAD_COMMIT_MSG" | grep '[release]')" && "$(echo "$HEAD_COMMIT_MSG" | grep 'release-')" ]]; then
               echo "Skipping Lerna version for release merge"
             else
+              echo "Running conventional commit versioning on main"
               yarn lerna version --conventional-commits --create-release github --no-private --yes
             fi
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "Running pre-release versioning on release branch"
             yarn lerna version --conventional-commits --conventional-prerelease --preid rc --create-release github --no-private --yes
           fi
         env:
