@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [8.0.0-rc.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@8.0.0-rc.2...@my-dummy-js-versioning-playground/footer@8.0.0-rc.3) (2024-11-19)
+
+
+### Features
+
+* **test:** add a feature to rc v8 [release] ([16c84dd](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/16c84dd55ec1c3545cf43fcf1fc0bb38b389b523))
+
+
+
+
+
+# [8.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@7.0.1...@my-dummy-js-versioning-playground/footer@8.0.0-rc.2) (2024-11-19)
+
+
+### Features
+
+* **test:** rc v8 [release] ([bd52e06](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/bd52e0639c9484651f49ff58f6620f45a59c5c58))
+
+
+
+
+
 ## [7.0.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@7.0.0-rc.3...@my-dummy-js-versioning-playground/footer@7.0.1) (2024-11-19)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/footer

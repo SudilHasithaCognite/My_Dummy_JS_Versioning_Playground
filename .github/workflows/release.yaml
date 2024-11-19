@@ -104,7 +104,8 @@ jobs:
             EVENT_PATH_CONTENT=$(cat ${GITHUB_EVENT_PATH} | jq -r '.')
             HEAD_COMMIT_MSG=$(echo $EVENT_PATH_CONTENT | jq -r '.commits[0].message')
             if [[ "$(echo "$HEAD_COMMIT_MSG" | grep 'Merge pull request')" && "$(echo "$HEAD_COMMIT_MSG" | grep '[release]')" && "$(echo "$HEAD_COMMIT_MSG" | grep 'release-')" ]]; then
-              echo "Skipping Lerna version for release merge"
+              echo "Running major version bump for release merge"
+              yarn lerna version major --conventional-commits --create-release github --no-private --yes --force-publish
             else
               echo "Running conventional commit versioning on main"
               yarn lerna version --conventional-commits --create-release github --no-private --yes
