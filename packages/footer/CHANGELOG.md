@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [9.0.0-rc.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@9.0.0-rc.2...@my-dummy-js-versioning-playground/footer@9.0.0-rc.3) (2024-11-19)
+
+
+### Features
+
+* **test:** add a feature to rc v9 [release] ([13fbbf2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/13fbbf229d418415ca27beec8f9b5c77e9af2801))
+
+
+
+
+
 # [9.0.0-rc.2](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@8.0.1...@my-dummy-js-versioning-playground/footer@9.0.0-rc.2) (2024-11-19)
 
 
