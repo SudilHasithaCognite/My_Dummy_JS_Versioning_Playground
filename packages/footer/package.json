@@ -1,6 +1,6 @@
 {
   "name": "@my-dummy-js-versioning-playground/footer",
-  "version": "7.0.1",
+  "version": "8.0.0-rc.1",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
