@@ -36,7 +36,7 @@ jobs:
   publish:
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
           (
-            (github.ref == 'refs/heads/master' && contains(github.event.head_commit.message, '[release]')) ||
+            (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) ||
             (startsWith(github.ref, 'refs/heads/release-') &&
               (   
                 startsWith(github.event.head_commit.message, 'fix:') ||
@@ -89,10 +89,10 @@ jobs:
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       # ────────────────────────────────────────────────────────
-      # 1️⃣  Master: version bump via PR (no direct push)
+      # 1️⃣  main: version bump via PR (no direct push)
       # ────────────────────────────────────────────────────────
       - name: Generate version bump (no-push)
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: |
           yarn lerna version \
             --conventional-commits \
@@ -101,7 +101,7 @@ jobs:
             --no-push
 
       - name: Create bump PR
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GH_LERNA_TOKEN }}
@@ -113,11 +113,11 @@ jobs:
           labels: auto-release
 
       # ────────────────────────────────────────────────────────
-      # 2️⃣  Master: remove RC tags via PR after RC-branch merge
+      # 2️⃣  main: remove RC tags via PR after RC-branch merge
       # ────────────────────────────────────────────────────────
       - name: Stage RC-tag removal
         if: >-
-          github.ref == 'refs/heads/master' &&
+          github.ref == 'refs/heads/main' &&
           contains(github.event.head_commit.message, 'Merge pull request') &&
           contains(github.event.head_commit.message, 'release-') &&
           contains(github.event.head_commit.message, '[release]')
@@ -134,7 +134,7 @@ jobs:
       - name: Create remove-rc PR
         id: create-remove-rc-pr
         if: >-
-          github.ref == 'refs/heads/master' &&
+          github.ref == 'refs/heads/main' &&
           contains(github.event.head_commit.message, 'Merge pull request') &&
           contains(github.event.head_commit.message, 'release-') &&
           contains(github.event.head_commit.message, '[release]')
@@ -179,7 +179,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN:      ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/master" ]]; then
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access
           else
             yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
