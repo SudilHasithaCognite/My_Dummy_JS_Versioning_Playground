@@ -25,13 +25,13 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
 
       - name: Install 🔧
         run: yarn install --immutable
 
       - name: Build
-        run: yarn build
+        run: yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
 
   publish:
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
@@ -66,7 +66,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
 
       - name: Install 🔧
         run: yarn install --immutable
@@ -80,13 +80,13 @@ jobs:
 
       - name: Lerna env config
         run: |
-          git config user.email "cognite-cicd@users.noreply.github.com"
-          git config user.name  "Cognite CICD"
+          git config user.email "sudil.abeyagunasekera@cognite.com"
+          git config user.name  "SudilHasithaCognite"
           git remote set-url origin "https://${{ secrets.GH_LERNA_TOKEN }}@github.com/${{ github.repository }}.git"
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" >> .npmrc
         env:
           GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ────────────────────────────────────────────────────────
       # 1️⃣  main: version bump via PR (no direct push)
@@ -177,7 +177,7 @@ jobs:
         if: contains(github.event.head_commit.message, '[release]')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN:      ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_TOKEN:      ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access
