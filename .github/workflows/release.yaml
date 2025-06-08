@@ -159,8 +159,10 @@ jobs:
       # ────────────────────────────────────────────────────────
       # 3️⃣  release-* branches: original prerelease bump
       # ────────────────────────────────────────────────────────
-      - name: Pre-release bump on release-* branches
+      - name: Lerna pre-release (on release-*)
         if: startsWith(github.ref, 'refs/heads/release-')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn lerna version \
             --conventional-commits \
