@@ -86,6 +86,7 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
 
       # ────────────────────────────────────────────────────────
       # 1️⃣  main: version bump via PR (no direct push)
@@ -170,7 +171,7 @@ jobs:
             --yes
 
       # ────────────────────────────────────────────────────────
-      # 4️⃣  Lerna publish (unchanged)
+      # 4️⃣  Lerna publish 
       # ────────────────────────────────────────────────────────
       - name: Lerna Publish
         if: contains(github.event.head_commit.message, '[release]')
