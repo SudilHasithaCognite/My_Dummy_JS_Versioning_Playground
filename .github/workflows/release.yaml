@@ -122,13 +122,9 @@ jobs:
           contains(github.event.head_commit.message, 'release-') &&
           contains(github.event.head_commit.message, '[release]')
         run: |
+            git config user.email "sudil.abeyagunasekera@cognite.com"
+            git config user.name  "SudilHasithaCognite"
             node scripts/remove-rc-tags.js
-            node scripts/remove-rc-tags.js
-            git config --global user.email "cognite-cicd@users.noreply.github.com"
-            git config --global user.name "Cognite CICD"
-            node scripts/remove-rc-tags.js
-            git config --global user.email "cognite-cicd@users.noreply.github.com"
-            git config --global user.name "Cognite CICD"
             git add packages/*/package.json
 
       - name: Create remove-rc PR
