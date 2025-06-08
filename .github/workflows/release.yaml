@@ -85,8 +85,8 @@ jobs:
           git remote set-url origin "https://${{ secrets.GH_LERNA_TOKEN }}@github.com/${{ github.repository }}.git"
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ────────────────────────────────────────────────────────
       # 1️⃣  main: version bump via PR (no direct push)
