@@ -155,11 +155,22 @@ jobs:
       # ────────────────────────────────────────────────────────
       # 4️⃣  Lerna publish 
       # ────────────────────────────────────────────────────────
+      - name: Authenticate npm
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+
+      - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
       - name: Lerna Publish
         if: contains(github.event.head_commit.message, '[release]')
         env:
           GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_TOKEN:      ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access
