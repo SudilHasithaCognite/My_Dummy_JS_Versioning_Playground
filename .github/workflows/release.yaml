@@ -31,7 +31,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build
-        run: yarn build
+        run: yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
 
   publish:
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
@@ -80,10 +80,10 @@ jobs:
 
       - name: Lerna env config
         run: |
-          git config user.email "cognite-cicd@users.noreply.github.com"
-          git config user.name  "Cognite CICD"
+          git config user.email "sudil.abeyagunasekera@cognite.com"
+          git config user.name  "SudilHasithaCognite"
           git remote set-url origin "https://${{ secrets.GH_LERNA_TOKEN }}@github.com/${{ github.repository }}.git"
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_PUBLISH_TOKEN }}" >> .npmrc
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         env:
           GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
           NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
@@ -171,13 +171,13 @@ jobs:
             --yes
 
       # ────────────────────────────────────────────────────────
-      # 4️⃣  Lerna publish (unchanged)
+      # 4️⃣  Lerna publish 
       # ────────────────────────────────────────────────────────
       - name: Lerna Publish
         if: contains(github.event.head_commit.message, '[release]')
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN:      ${{ secrets.NPM_PUBLISH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
+          NPM_TOKEN:      ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access

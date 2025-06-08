@@ -1,0 +1,13 @@
+policy:
+  approval:
+    - or:
+        - risk review copy
+
+approval_rules:
+  - name: risk review copy
+    if:
+      targets_branch:
+        pattern: "^main$"
+    requires:
+      count: 1
+      permissions: ["write"]
