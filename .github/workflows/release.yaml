@@ -31,9 +31,7 @@ jobs:
         run: yarn install --immutable
 
       - name: Build
-        run: yarn lerna run build --stream \
-          --scope=@my-dummy-js-versioning-playground/{header,footer} \
-          && yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
+        run: yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
 
   publish:
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
