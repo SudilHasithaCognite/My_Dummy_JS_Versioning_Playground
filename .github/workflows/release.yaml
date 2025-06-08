@@ -31,67 +31,51 @@ jobs:
         run: yarn install --immutable
 
       - name: Build
-        run: yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
+        run: yarn lerna run build --stream \
+          --scope=@my-dummy-js-versioning-playground/{header,footer} \
+          && yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
 
   publish:
     if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
-          (
-            (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) ||
-            (startsWith(github.ref, 'refs/heads/release-') &&
-              (   
-                startsWith(github.event.head_commit.message, 'fix:') ||
-                startsWith(github.event.head_commit.message, 'fix(') ||
+           (
+             (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) ||
+             (startsWith(github.ref, 'refs/heads/release-') &&
+               (startsWith(github.event.head_commit.message, 'fix:') ||
                 startsWith(github.event.head_commit.message, 'feat:') ||
-                startsWith(github.event.head_commit.message, 'feat(') ||
-                contains(github.event.head_commit.message, '[release]')
-              )
-            )
-          )
-        }}
+                contains(github.event.head_commit.message, '[release]'))
+             )
+           )
+         }}
     runs-on: ubuntu-latest
     environment: CD
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: true
+          token: ${{ secrets.GH_LERNA_TOKEN }}
 
-      - name: Use Node.js
+      - name: Setup Node & npm auth
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
-      - name: Cache node_modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
-
-      - name: Install 🔧
-        run: yarn install --immutable
-
-      - name: Build
-        run: yarn build
-
-      - name: Build doc
-        run: yarn docs:bundle
-
-
-      - name: Lerna env config
-        run: |
-          git config user.email "sudil.abeyagunasekera@cognite.com"
-          git config user.name  "SudilHasithaCognite"
-          git remote set-url origin "https://${{ secrets.GH_LERNA_TOKEN }}@github.com/${{ github.repository }}.git"
-          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+      - name: Install dependencies
+        run: npm ci
         env:
-          GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # ────────────────────────────────────────────────────────
-      # 1️⃣  main: version bump via PR (no direct push)
-      # ────────────────────────────────────────────────────────
-      - name: Generate version bump (no-push)
+      - name: Verify npm credentials
+        run: |
+          echo "Registry: $(npm config get registry)"
+          npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Lerna version bump / PR creation
         if: github.ref == 'refs/heads/main'
         run: |
           yarn lerna version \
@@ -112,28 +96,21 @@ jobs:
             This PR was auto-generated to bump package versions.
           labels: auto-release
 
-      # ────────────────────────────────────────────────────────
-      # 2️⃣  main: remove RC tags via PR after RC-branch merge
-      # ────────────────────────────────────────────────────────
-      - name: Stage RC-tag removal
-        if: >-
+      - name: Stage & Create remove-rc PR
+        if: >
           github.ref == 'refs/heads/main' &&
           contains(github.event.head_commit.message, 'Merge pull request') &&
           contains(github.event.head_commit.message, 'release-') &&
           contains(github.event.head_commit.message, '[release]')
         run: |
-            git config user.email "sudil.abeyagunasekera@cognite.com"
-            git config user.name  "SudilHasithaCognite"
-            node scripts/remove-rc-tags.js
-            git add packages/*/package.json
+          git config user.email "sudil.abeyagunasekera@cognite.com"
+          git config user.name "SudilHasithaCognite"
+          node scripts/remove-rc-tags.js
+          git add packages/*/package.json
+        id: remove-rc
 
       - name: Create remove-rc PR
-        id: create-remove-rc-pr
-        if: >-
-          github.ref == 'refs/heads/main' &&
-          contains(github.event.head_commit.message, 'Merge pull request') &&
-          contains(github.event.head_commit.message, 'release-') &&
-          contains(github.event.head_commit.message, '[release]')
+        if: steps.remove-rc
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GH_LERNA_TOKEN }}
@@ -145,35 +122,21 @@ jobs:
           labels: auto-release
 
       - name: Auto-merge remove-rc PR
-        if: steps.create-remove-rc-pr.outputs.pull-request-number
+        if: steps.remove-rc && steps.remove-rc.outputs.pull-request-number
         uses: peter-evans/enable-pull-request-automerge@v1
         with:
-          pull-request-number: ${{ steps.create-remove-rc-pr.outputs.pull-request-number }}
-          merge-method: squash
           token: ${{ secrets.GH_LERNA_TOKEN }}
+          pull-request-number: ${{ steps.remove-rc.outputs.pull-request-number }}
+          merge-method: squash
 
-      # ────────────────────────────────────────────────────────
-      # 4️⃣  Lerna publish 
-      # ────────────────────────────────────────────────────────
-      - name: Authenticate npm
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-
-      - run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          
-      - name: Lerna Publish
+      - name: Lerna publish
         if: contains(github.event.head_commit.message, '[release]')
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            yarn lerna publish from-package --yes --no-git-reset --no-verify-access
+            yarn lerna publish from-package --yes --no-git-reset
           else
-            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
+            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset
           fi
