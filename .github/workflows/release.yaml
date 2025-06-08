@@ -25,7 +25,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
 
       - name: Install 🔧
         run: yarn install --immutable
@@ -66,7 +66,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json') }}
+          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
 
       - name: Install 🔧
         run: yarn install --immutable
@@ -86,7 +86,7 @@ jobs:
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
         env:
           GH_LERNA_TOKEN:    ${{ secrets.GH_LERNA_TOKEN }}
-          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+          NPM_PUBLISH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # ────────────────────────────────────────────────────────
       # 1️⃣  main: version bump via PR (no direct push)
