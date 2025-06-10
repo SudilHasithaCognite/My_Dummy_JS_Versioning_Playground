@@ -101,8 +101,8 @@ jobs:
           contains(github.event.head_commit.message, 'release-') &&
           contains(github.event.head_commit.message, '[release]')
         run: |
-          git config user.email "sudil.abeyagunasekera@cognite.com"
-          git config user.name "SudilHasithaCognite"
+          git config --global user.email "sudil.abeyagunasekera@cognite.com"
+          git config --global user.name "SudilHasithaCognite"
           node scripts/remove-rc-tags.js
           git add packages/*/package.json
         id: remove-rc
