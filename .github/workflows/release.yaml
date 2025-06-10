@@ -73,6 +73,11 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Configure Git user
+        run: |
+          git config --global user.email "sudil.abeyagunasekera@cognite.com"
+          git config --global user.name "SudilHasithaCognite"
+
       - name: Lerna version bump / PR creation
         if: github.ref == 'refs/heads/main'
         run: |
