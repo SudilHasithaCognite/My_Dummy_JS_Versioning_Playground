@@ -6,6 +6,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [14.0.0-rc.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@13.1.0-rc.0...@my-dummy-js-versioning-playground/header@14.0.0-rc.1) (2025-06-21)
 
 
+
 ### Features
 
 * just relase a major version [release] ([8402982](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/8402982e83c75cc4de9f9e7d407ea105449b3cab))
