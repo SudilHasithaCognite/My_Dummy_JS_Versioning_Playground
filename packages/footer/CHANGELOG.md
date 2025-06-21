@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [14.0.0-rc.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@13.1.0-rc.0...@my-dummy-js-versioning-playground/footer@14.0.0-rc.1) (2025-06-21)
+
+
+### Features
+
+* just relase a major version [release] ([8402982](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/8402982e83c75cc4de9f9e7d407ea105449b3cab))
+
+
+
+
+
 # [13.1.0-rc.0](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@12.0.0-rc.0...@my-dummy-js-versioning-playground/footer@13.1.0-rc.0) (2025-06-08)
 
 
