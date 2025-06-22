@@ -73,9 +73,7 @@ jobs:
         run: |
           git config --global user.email "sudil.abeyagunasekera@cognite.com"
           git config --global user.name "SudilHasithaCognite"
-          # Authenticate Git for pushing (using token instead of username/password)
-          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
-          # Authenticate NPM for publishing
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
 
       # **Remove RC tags when a release branch is merged into main**
