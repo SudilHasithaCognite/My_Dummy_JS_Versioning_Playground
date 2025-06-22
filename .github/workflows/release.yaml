@@ -87,8 +87,7 @@ jobs:
           node scripts/remove-rc-tags.js
           git add packages/*/package.json
           git commit -m "chore: remove RC tags (from release branch merge)"
-        # (This prepares for final major release by resetting version to the last stable series:contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}.)
-
+      
       # **Bump version using Lerna (without pushing directly to main)**
       - name: Bump version with Lerna
         env:
