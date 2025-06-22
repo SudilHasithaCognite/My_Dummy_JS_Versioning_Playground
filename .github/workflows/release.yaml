@@ -102,16 +102,15 @@ jobs:
             if [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
             || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]]; then
               echo "Detected merge of release- branch into main performing major version bump"
-              yarn lerna version major --conventional-commits --yes --no-push -m "chore(release): publish new package versions":contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
+              yarn lerna version major --conventional-commits --yes --no-push 
             elif [[ "$HEAD_MSG" == *"[release]"* ]]; then
               echo "Conventional release commit on main performing standard version bump"
-              yarn lerna version --conventional-commits --yes --no-push -m "chore(release): publish new package versions":contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
-            elif [[ "$HEAD_MSG" == "chore(release:"* ]]; then
+              yarn lerna version --conventional-commits --yes --no-push 
               echo "Release version already bumped on main skipping version increment"
             fi
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
             echo "Release branch commit performing prerelease bump (rc)"
-            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push -m "chore(release): publish new RC version":contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}
+            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push 
           fi
 
       # **Push version changes to a new branch or current release branch**
@@ -149,6 +148,7 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          echo "NPM token debugging ${NPM_TOKEN}"
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             echo "Publishing final release to NPM…"
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access
