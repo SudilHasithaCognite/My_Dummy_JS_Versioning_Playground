@@ -1,6 +1,6 @@
 {
   "name": "@my-dummy-js-versioning-playground/header",
-  "version": "15.0.1",
+  "version": "15.0.2",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
