@@ -1,145 +1,159 @@
-name: CD
+name: Release Pipeline
+
+# Ensure the GITHUB_TOKEN has rights to push and create PRs (but not bypass protections)
+permissions:
+  contents: write
+  pull-requests: write
 
 on:
   push:
     branches:
-      - main
-      - 'release-*'
-
-permissions:
-  contents: write
+      - main       # Trigger on main (protected)
+      - "release-*"  # Trigger on release candidate branches
 
 jobs:
+  # Build job: always run on pushes to build and test the project
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Cache node_modules
-        id: cache-modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.OS }}-build-${{ hashFiles('package.json', 'yarn.lock') }}
-
-      - name: Install 🔧
-        run: yarn install --immutable
-
-      - name: Build
-        run: yarn lerna run build --stream --scope=@my-dummy-js-versioning-playground/{header,footer} && lerna run build --stream --scope=@my-dummy-js-versioning-playground/remixapp
-
-  publish:
-    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') &&
-           (
-             (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]')) ||
-             (startsWith(github.ref, 'refs/heads/release-') &&
-               (startsWith(github.event.head_commit.message, 'fix:') ||
-                startsWith(github.event.head_commit.message, 'feat:') ||
-                contains(github.event.head_commit.message, '[release]'))
-             )
-           )
-         }}
-    runs-on: ubuntu-latest
-    environment: CD
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-
-      - name: Setup Node & npm auth
+      - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
-
-      - name: Install dependencies
-        run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Verify npm credentials
-        run: |
-          echo "Registry: $(npm config get registry)"
-          npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Configure Git user
-        run: |
-          git config --global user.email "sudil.abeyagunasekera@cognite.com"
-          git config --global user.name "SudilHasithaCognite"
-
-      - name: Lerna version bump / PR creation
-        if: github.ref == 'refs/heads/main'
-        run: |
-          yarn lerna version \
-            --conventional-commits \
-            --yes \
-            --force-publish \
-            --no-push
-
-      - name: Create bump PR
-        if: github.ref == 'refs/heads/main'
-        uses: peter-evans/create-pull-request@v5
+          node-version: 20
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache-node-modules
         with:
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-          commit-message: "chore(release): bump versions [skip ci]"
-          branch: "version/bumps/${{ github.sha }}"
-          title: "chore(version): bump versions"
-          body: |
-            This PR was auto-generated to bump package versions.
-          labels: auto-release
+          path: node_modules
+          key: ${{ runner.OS }}-mods-${{ hashFiles('package.json', 'yarn.lock') }}
+      - name: Install dependencies 🔧
+        run: yarn install --immutable
+      - name: Build package
+        run: yarn build
 
-      - name: Stage & Create remove-rc PR
-        if: >
-          github.ref == 'refs/heads/main' &&
-          contains(github.event.head_commit.message, 'Merge pull request') &&
-          contains(github.event.head_commit.message, 'release-') &&
-          contains(github.event.head_commit.message, '[release]')
+  # Publish job: runs only for release-related commits (with [release] or on release branches)
+  publish:
+    # Only proceed for commits indicating a release
+    if: ${{ !contains(github.event.head_commit.message, '[skip-ci]') && (
+            (github.ref == 'refs/heads/main' && ( contains(github.event.head_commit.message, '[release]') 
+                                                || startsWith(github.event.head_commit.message, 'chore(release)') )) 
+         || (startsWith(github.ref, 'refs/heads/release-') && ( startsWith(github.event.head_commit.message, 'feat:') 
+                                                              || startsWith(github.event.head_commit.message, 'feat(')
+                                                              || startsWith(github.event.head_commit.message, 'fix:') 
+                                                              || startsWith(github.event.head_commit.message, 'fix(') 
+                                                              || contains(github.event.head_commit.message, '[release]') ))
+         ) }}
+    runs-on: ubuntu-latest
+    environment: CD  # Use "CD" environment (if defined for NPM tokens, etc.)
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false  # Prevent direct push using default token
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        id: cache-node-modules
+        with:
+          path: node_modules
+          key: ${{ runner.OS }}-mods-${{ hashFiles('package.json', 'yarn.lock') }}
+      - name: Install dependencies 🔧
+        run: yarn install --immutable
+
+      - name: Configure Git & NPM
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: |
-          git config --global user.email "sudil.abeyagunasekera@cognite.com"
-          git config --global user.name "SudilHasithaCognite"
+          git config --global user.email "cicd-bot@example.com"
+          git config --global user.name "CI Release Bot"
+          # Authenticate Git for pushing (using token instead of username/password)
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          # Authenticate NPM for publishing
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+
+      # **Remove RC tags when a release branch is merged into main**
+      - name: Remove RC suffix from version
+        if: ${{ github.ref == 'refs/heads/main' 
+                && contains(github.event.head_commit.message, 'Merge pull request') 
+                && contains(github.event.head_commit.message, 'release-') 
+                && contains(github.event.head_commit.message, '[release]') }}
+        run: |
+          # Remove "-rc.X" from package versions on main after RC branch merge
           node scripts/remove-rc-tags.js
           git add packages/*/package.json
-        id: remove-rc
+          git commit -m "chore: remove RC tags (from release branch merge)"
+        # (This prepares for final major release by resetting version to the last stable series:contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}.)
 
-      - name: Create remove-rc PR
-        if: steps.remove-rc
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-          commit-message: "chore(release): remove rc tags [skip ci]"
-          branch: "version-rc/remove-rc/${{ github.sha }}"
-          title: "chore(version-rc): remove rc tags"
-          body: |
-            This PR automatically removes “rc” prerelease tags after a release merge.
-          labels: auto-release
-
-      - name: Auto-merge remove-rc PR
-        if: steps.remove-rc && steps.remove-rc.outputs.pull-request-number
-        uses: peter-evans/enable-pull-request-automerge@v1
-        with:
-          token: ${{ secrets.GH_LERNA_TOKEN }}
-          pull-request-number: ${{ steps.remove-rc.outputs.pull-request-number }}
-          merge-method: squash
-
-      - name: Lerna publish
-        if: contains(github.event.head_commit.message, '[release]')
+      # **Bump version using Lerna (without pushing directly to main)**
+      - name: Bump version with Lerna
         env:
-          GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            yarn lerna publish from-package --yes --no-git-reset
-          else
-            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset
+            # On main: decide between major or conventional bump based on commit
+            EVENT_JSON=$(cat "${GITHUB_EVENT_PATH}")
+            HEAD_MSG=$(echo "$EVENT_JSON" | jq -r '.head_commit.message')
+            MERGE_MSG=$(echo "$EVENT_JSON" | jq -r '.commits[-1].message')
+            if [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
+            || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]]; then
+              echo "Detected merge of release- branch into main performing major version bump"
+              yarn lerna version major --conventional-commits --yes --no-push -m "chore(release): publish new package versions":contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}
+            elif [[ "$HEAD_MSG" == *"[release]"* ]]; then
+              echo "Conventional release commit on main performing standard version bump"
+              yarn lerna version --conventional-commits --yes --no-push -m "chore(release): publish new package versions":contentReference[oaicite:4]{index=4}:contentReference[oaicite:5]{index=5}
+            elif [[ "$HEAD_MSG" == "chore(release:"* ]]; then
+              echo "Release version already bumped on main skipping version increment"
+            fi
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "Release branch commit performing prerelease bump (rc)"
+            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push -m "chore(release): publish new RC version":contentReference[oaicite:6]{index=6}:contentReference[oaicite:7]{index=7}
+          fi
+
+      # **Push version changes to a new branch or current release branch**
+      - name: Push release changes
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            # Create a new branch for the version bump PR
+            releaseBranch="release-bump-${{ github.run_id }}"
+            git checkout -b "$releaseBranch"
+            # Include tags when pushing (Lerna has created tags locally with --no-push)
+            git push origin "$releaseBranch" --follow-tags
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            # On release branch, push changes (including tags) back to origin
+            git push origin "${GITHUB_REF#refs/heads/}" --follow-tags
+          fi
+
+      # **Open a pull request if changes were pushed to a release-bump branch**
+      - name: Create release PR
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "${GH_TOKEN}" > gh_token.txt
+          gh auth login --with-token < gh_token.txt
+          # Create a PR from the release-bump branch to main
+          gh pr create --base main --head "$releaseBranch" \
+            --title "chore(release): $(jq -r '.head_commit.message' "$GITHUB_EVENT_PATH" | sed -E 's/.*\[release\].*/Release/' )" \
+            --body "🤖 **Automated PR** Version bump and changelog for new release. Please review and merge to publish." 
+          # (No auto-merge; human approval required.)
+      
+      # **Publish to NPM (only after PR merges or for RC commits)**
+      - name: Publish to NPM
+        if: ${{ startsWith(github.ref, 'refs/heads/release-') || startsWith(github.event.head_commit.message, 'chore(release)') }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+            echo "Publishing final release to NPM…"
+            yarn lerna publish from-package --yes --no-git-reset --no-verify-access
+          elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
+            echo "Publishing pre-release (rc) to NPM…"
+            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access:contentReference[oaicite:8]{index=8}
           fi
