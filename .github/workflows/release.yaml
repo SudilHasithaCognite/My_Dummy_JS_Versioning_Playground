@@ -91,7 +91,7 @@ jobs:
           git commit -m "chore: remove RC tags (from release branch merge)"
       
       # **Bump version using Lerna (without pushing directly to main)**
-            - name: Bump version with Lerna
+      - name: Bump version with Lerna
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
