@@ -134,13 +134,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          echo "${GH_TOKEN}" > gh_token.txt
-          gh auth login --with-token < gh_token.txt
-          # Create a PR from the release-bump branch to main
           gh pr create --base main --head "$releaseBranch" \
-            --title "chore(release): $(jq -r '.head_commit.message' "$GITHUB_EVENT_PATH" | sed -E 's/.*\[release\].*/Release/' )" \
-            --body "🤖 **Automated PR** Version bump and changelog for new release. Please review and merge to publish." 
-          # (No auto-merge; human approval required.)
+             --title "chore(release): Release" \
+             --body "🤖 **Automated PR** Version bump and changelog for new release. Please review and merge to publish."
       
       # **Publish to NPM (only after PR merges or for RC commits)**
       - name: Publish to NPM
