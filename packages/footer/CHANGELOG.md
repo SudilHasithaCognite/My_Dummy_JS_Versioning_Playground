@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [15.0.0-rc.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@15.0.0-rc.0...@my-dummy-js-versioning-playground/footer@15.0.0-rc.1) (2025-06-22)
+
+
+### Features
+
+* test rc [release] ([0e1476c](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/0e1476c89499dbe71d75837540e2fe8d665fb44a))
+
+
+
+
+
+# [15.0.0-rc.0](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@14.0.0-rc.1...@my-dummy-js-versioning-playground/footer@15.0.0-rc.0) (2025-06-22)
+
+
+### Features
+
+* test [release] ([9025cf7](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/9025cf7bc2637ffa9facf8c1ad8493bee07dbd3b))
+
+
+
+
+
 # [14.0.0-rc.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@13.1.0-rc.0...@my-dummy-js-versioning-playground/footer@14.0.0-rc.1) (2025-06-21)
 
 
