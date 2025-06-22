@@ -155,5 +155,5 @@ jobs:
             yarn lerna publish from-package --yes --no-git-reset --no-verify-access
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
             echo "Publishing pre-release (rc) to NPM…"
-            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access:contentReference[oaicite:8]{index=8}
+            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset --no-verify-access
           fi
