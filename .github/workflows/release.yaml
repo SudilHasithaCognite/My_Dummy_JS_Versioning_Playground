@@ -135,7 +135,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           gh pr create --base main --head "$releaseBranch" \
-             --title "chore(release): Release" \
+             --title "chore(release): Release after updating changelog [release]" \
              --body "🤖 **Automated PR** Version bump and changelog for new release. Please review and merge to publish."
       
       # **Publish to NPM (only after PR merges or for RC commits)**
