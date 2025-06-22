@@ -69,7 +69,7 @@ jobs:
       - name: Configure Git & NPM
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config --global user.email "sudil.abeyagunasekera@cognite.com"
           git config --global user.name "SudilHasithaCognite"
@@ -92,7 +92,7 @@ jobs:
       - name: Bump version with Lerna
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
             # On main: decide between major or conventional bump based on commit
@@ -132,7 +132,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           echo "${GH_TOKEN}" > gh_token.txt
           gh auth login --with-token < gh_token.txt
@@ -154,5 +154,5 @@ jobs:
             yarn lerna publish from-package --yes --no-git-reset
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
             echo "Publishing pre-release (rc) to NPM…"
-            yarn lerna publish from-package  --pre-dist-tag rc --yes --no-git-reset
+            yarn lerna publish from-package --pre-dist-tag rc --yes --no-git-reset
           fi
