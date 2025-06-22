@@ -91,29 +91,37 @@ jobs:
           git commit -m "chore: remove RC tags (from release branch merge)"
       
       # **Bump version using Lerna (without pushing directly to main)**
-      - name: Bump version with Lerna
+            - name: Bump version with Lerna
         env:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          EVENT_JSON=$(cat "${GITHUB_EVENT_PATH}")
+          HEAD_MSG=$(echo "$EVENT_JSON" | jq -r '.head_commit.message')
+          MERGE_MSG=$(echo "$EVENT_JSON" | jq -r '.commits[-1].message')
+
           if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
-            # On main: decide between major or conventional bump based on commit
-            EVENT_JSON=$(cat "${GITHUB_EVENT_PATH}")
-            HEAD_MSG=$(echo "$EVENT_JSON" | jq -r '.head_commit.message')
-            MERGE_MSG=$(echo "$EVENT_JSON" | jq -r '.commits[-1].message')
-            if [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
-            || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]]; then
-              echo "Detected merge of release- branch into main performing major version bump"
-              yarn lerna version major --conventional-commits --yes --no-push 
-            elif [[ "$HEAD_MSG" == *"[release]"* ]]; then
-              echo "Conventional release commit on main performing standard version bump"
-              yarn lerna version --conventional-commits --yes --no-push 
-              echo "Release version already bumped on main skipping version increment"
+            echo "On main, checking release merge or manual release..."
+            if ( [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
+              || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]] ) \
+              && [[ "$HEAD_MSG" != *"chore(release): Release after updating changelog [release]"* ]]; then
+              echo "Detected release- branch merge; doing major bump"
+              yarn lerna version major --conventional-commits --yes --no-push
+            elif [[ "$HEAD_MSG" == *"[release]"* ]] && [[ "$HEAD_MSG" == *"chore(release): Release after updating changelog [release]"* ]]; then
+              echo "Manual release commit; doing standard bump"
+              yarn lerna version --conventional-commits --yes --no-push
+            else
+              echo "No version bump needed"
             fi
+
           elif [[ "${GITHUB_REF}" == refs/heads/release-* ]]; then
-            echo "Release branch commit performing prerelease bump (rc)"
-            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push 
+            echo "On release- branch; doing prerelease bump"
+            yarn lerna version --conventional-commits --conventional-prerelease --preid rc --yes --no-push
+
+          else
+            echo "Not on a release branch or main; skipping"
           fi
+
 
       # **Push version changes to a new branch or current release branch**
       - name: Push release changes
