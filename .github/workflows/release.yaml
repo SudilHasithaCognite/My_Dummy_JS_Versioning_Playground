@@ -71,8 +71,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_LERNA_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          git config --global user.email "cicd-bot@example.com"
-          git config --global user.name "CI Release Bot"
+          git config --global user.email "sudil.abeyagunasekera@cognite.com"
+          git config --global user.name "SudilHasithaCognite"
           # Authenticate Git for pushing (using token instead of username/password)
           git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
           # Authenticate NPM for publishing
