@@ -52,7 +52,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          persist-credentials: false  # Prevent direct push using default token
+          persist-credentials: true  # Prevent direct push using default token
       - name: Use Node.js 20
         uses: actions/setup-node@v4
         with:
