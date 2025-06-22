@@ -82,6 +82,7 @@ jobs:
                 && contains(github.event.head_commit.message, 'Merge pull request') 
                 && contains(github.event.head_commit.message, 'release-') 
                 && contains(github.event.head_commit.message, '[release]') }}
+                && !contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]') }}
         run: |
           # Remove "-rc.X" from package versions on main after RC branch merge
           node scripts/remove-rc-tags.js
