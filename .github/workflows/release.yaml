@@ -78,11 +78,12 @@ jobs:
 
       # **Remove RC tags when a release branch is merged into main**
       - name: Remove RC suffix from version
-        if: ${{ github.ref == 'refs/heads/main' 
-                && contains(github.event.head_commit.message, 'Merge pull request') 
-                && contains(github.event.head_commit.message, 'release-') 
-                && contains(github.event.head_commit.message, '[release]')
-                && !contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]') }}
+        if: |
+          github.ref == 'refs/heads/main' &&
+          contains(github.event.head_commit.message, 'Merge pull request') &&
+          contains(github.event.head_commit.message, 'release-') &&
+          contains(github.event.head_commit.message, '[release]') &&
+          !contains(github.event.head_commit.message, 'chore(release): Release after updating changelog [release]')
         run: |
           # Remove "-rc.X" from package versions on main after RC branch merge
           node scripts/remove-rc-tags.js
