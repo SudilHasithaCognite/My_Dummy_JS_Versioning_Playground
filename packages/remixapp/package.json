@@ -1,6 +1,6 @@
 {
   "name": "@my-dummy-js-versioning-playground/remixapp",
-  "version": "2.0.1-rc.0",
+  "version": "1.0.0",
   "private": true,
   "sideEffects": false,
   "scripts": {
