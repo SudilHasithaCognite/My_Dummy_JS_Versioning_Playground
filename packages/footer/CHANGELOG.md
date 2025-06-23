@@ -68,7 +68,6 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 
 
-
 # [14.0.0-rc.1](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/footer@13.1.0-rc.0...@my-dummy-js-versioning-playground/footer@14.0.0-rc.1) (2025-06-21)
 
 
