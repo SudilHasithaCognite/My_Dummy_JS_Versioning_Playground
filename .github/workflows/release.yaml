@@ -30,7 +30,7 @@ jobs:
           path: node_modules
           key: ${{ runner.OS }}-mods-${{ hashFiles('package.json', 'yarn.lock') }}
       - name: Install dependencies 🔧
-        run: yarn install --immutable
+        run: yarn install 
       - name: Build package
         run: yarn build
 
