@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/remixapp@1.0.3...@my-dummy-js-versioning-playground/remixapp@1.0.4) (2025-06-22)
+
+**Note:** Version bump only for package @my-dummy-js-versioning-playground/remixapp
+
+
+
+
+
 ## [1.0.3](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/remixapp@1.0.2...@my-dummy-js-versioning-playground/remixapp@1.0.3) (2025-06-22)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/remixapp
