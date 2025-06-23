@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [15.0.5](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@15.0.4...@my-dummy-js-versioning-playground/header@15.0.5) (2025-06-23)
+
+
+### Bug Fixes
+
+* changelog [skip-ci] ([3f8ffbc](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/commit/3f8ffbc333eda63e7e661f1eaffec6702039bfaa))
+
+
+
+
+
 ## [15.0.4](https://github.com/SudilHasithaCognite/My_Dummy_JS_Versioning_Playground/compare/@my-dummy-js-versioning-playground/header@15.0.3...@my-dummy-js-versioning-playground/header@15.0.4) (2025-06-22)
 
 **Note:** Version bump only for package @my-dummy-js-versioning-playground/header
