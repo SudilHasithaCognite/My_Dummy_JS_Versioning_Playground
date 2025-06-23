@@ -100,11 +100,10 @@ jobs:
           HEAD_MSG=$(echo "$EVENT_JSON" | jq -r '.head_commit.message')
           MERGE_MSG=$(echo "$EVENT_JSON" | jq -r '.commits[-1].message')
 
-          if [[ "${GITHUB_REF}" == "refs/heads/main" ]]; then
+          if [[ "${GITHUB_REF}" == "refs/heads/main" ]] && [[ "$HEAD_MSG" != *"chore(release): Release after updating changelog [release]"* ]]; then
             echo "On main, checking release merge or manual release..."
             if ( [[ "$HEAD_MSG" == *"Merge pull request"* && "$HEAD_MSG" == *"release-"* && "$HEAD_MSG" == *"[release]"* ]] \
-              || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]] ) \
-              && [[ "$HEAD_MSG" != *"chore(release): Release after updating changelog [release]"* ]]; then
+              || [[ "$MERGE_MSG" == *"Merge pull request"* && "$MERGE_MSG" == *"release-"* && "$MERGE_MSG" == *"[release]"* ]] ); then
               echo "Detected release- branch merge; doing major bump"
               yarn lerna version major --conventional-commits --yes --no-push
             elif [[ "$HEAD_MSG" == *"[release]"* ]] && [[ "$HEAD_MSG" == *"chore(release): Release after updating changelog [release]"* ]]; then
