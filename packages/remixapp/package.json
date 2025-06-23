@@ -10,8 +10,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "@my-dummy-js-versioning-playground/footer": "^15.0.0",
-    "@my-dummy-js-versioning-playground/header": "^15.0.0",
+    "@my-dummy-js-versioning-playground/footer": "*",
+    "@my-dummy-js-versioning-playground/header": "*",
     "@remix-run/node": "^1.5.1",
     "@remix-run/react": "^1.5.1",
     "@remix-run/serve": "^1.5.1",
